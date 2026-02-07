@@ -1,9 +1,27 @@
-import { Sparkles } from "lucide-react";
+import { Sparkles, Moon, Sun } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState, type ReactNode } from "react";
 
-export function DashboardHeader() {
+interface Props {
+  children?: ReactNode;
+}
+
+export function DashboardHeader({ children }: Props) {
   const hour = new Date().getHours();
   const greeting =
     hour < 12 ? "Bom dia" : hour < 18 ? "Boa tarde" : "Boa noite";
+
+  const [dark, setDark] = useState(() => {
+    const saved = localStorage.getItem("cchobby-theme");
+    if (saved === "dark") return true;
+    if (saved === "light") return false;
+    return document.documentElement.classList.contains("dark");
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", dark);
+    localStorage.setItem("cchobby-theme", dark ? "dark" : "light");
+  }, [dark]);
 
   return (
     <header className="flex items-center justify-between py-6">
@@ -13,9 +31,20 @@ export function DashboardHeader() {
         </div>
         <h1 className="text-2xl font-bold tracking-tight">CCHobby</h1>
       </div>
-      <p className="text-sm text-muted-foreground">
-        {greeting}! 👋
-      </p>
+      <div className="flex items-center gap-3">
+        <p className="hidden text-sm text-muted-foreground sm:block">
+          {greeting}! 👋
+        </p>
+        {children}
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => setDark((d) => !d)}
+          aria-label="Alternar tema"
+        >
+          {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        </Button>
+      </div>
     </header>
   );
 }

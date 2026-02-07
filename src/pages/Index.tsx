@@ -4,6 +4,7 @@ import { HabitCalendar } from "@/components/HabitCalendar";
 import { ProductivityChart } from "@/components/ProductivityChart";
 import { HabitPieChart } from "@/components/HabitPieChart";
 import { MonthlyGoals } from "@/components/MonthlyGoals";
+import { HabitManager } from "@/components/HabitManager";
 import { useHabits } from "@/hooks/useHabits";
 
 const Index = () => {
@@ -13,12 +14,15 @@ const Index = () => {
     setSelectedMonth, setSelectedYear, setSelectedDay,
     toggleHabit, getDayProgress, monthStats,
     addGoal, removeGoal, toggleGoal, editGoal, dateKey,
+    addHabit, removeHabit,
   } = useHabits();
 
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-6xl px-4 pb-12">
-        <DashboardHeader />
+        <DashboardHeader>
+          <HabitManager habits={habits} onAdd={addHabit} onRemove={removeHabit} />
+        </DashboardHeader>
 
         <div className="space-y-6">
           <SummaryCards

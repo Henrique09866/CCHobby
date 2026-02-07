@@ -165,6 +165,16 @@ export function useHabits() {
     );
   }, []);
 
+  const addHabit = useCallback((name: string) => {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    setHabits((prev) => (prev.includes(trimmed) ? prev : [...prev, trimmed]));
+  }, []);
+
+  const removeHabit = useCallback((name: string) => {
+    setHabits((prev) => prev.filter((h) => h !== name));
+  }, []);
+
   return {
     habits,
     habitData,
@@ -183,5 +193,7 @@ export function useHabits() {
     toggleGoal,
     editGoal,
     dateKey,
+    addHabit,
+    removeHabit,
   };
 }
