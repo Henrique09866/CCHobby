@@ -5,6 +5,7 @@ import { ProductivityChart } from "@/components/ProductivityChart";
 import { HabitPieChart } from "@/components/HabitPieChart";
 import { MonthlyGoals } from "@/components/MonthlyGoals";
 import { HabitManager } from "@/components/HabitManager";
+import { ExportCSV } from "@/components/ExportCSV";
 import { useHabits } from "@/hooks/useHabits";
 
 const Index = () => {
@@ -21,6 +22,13 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-6xl px-4 pb-12">
         <DashboardHeader>
+          <ExportCSV
+            habits={habits}
+            habitData={habitData}
+            goals={goals}
+            month={selectedMonth}
+            year={selectedYear}
+          />
           <HabitManager habits={habits} onAdd={addHabit} onRemove={removeHabit} />
         </DashboardHeader>
 
