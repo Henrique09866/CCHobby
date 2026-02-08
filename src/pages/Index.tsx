@@ -6,7 +6,11 @@ import { HabitPieChart } from "@/components/HabitPieChart";
 import { MonthlyGoals } from "@/components/MonthlyGoals";
 import { HabitManager } from "@/components/HabitManager";
 import { ExportCSV } from "@/components/ExportCSV";
+import { NotificationPanel } from "@/components/NotificationPanel";
+import { NotificationScheduler } from "@/components/NotificationScheduler";
+import { NotificationToastContainer } from "@/components/NotificationToastContainer";
 import { useHabits } from "@/hooks/useHabits";
+import { useNotifications } from "@/hooks/useNotifications";
 
 const Index = () => {
   const {
@@ -18,10 +22,26 @@ const Index = () => {
     addHabit, removeHabit,
   } = useHabits();
 
+  const {
+    notifications, toasts, unreadCount,
+    addNotification, dismissToast,
+    markRead, markAllRead, clearAll, removeNotification,
+  } = useNotifications();
+
   return (
     <div className="min-h-screen bg-background">
+      <NotificationToastContainer toasts={toasts} onDismiss={dismissToast} />
       <div className="mx-auto max-w-6xl px-4 pb-12">
         <DashboardHeader>
+          <NotificationScheduler onSchedule={addNotification} />
+          <NotificationPanel
+            notifications={notifications}
+            unreadCount={unreadCount}
+            onMarkRead={markRead}
+            onMarkAllRead={markAllRead}
+            onClearAll={clearAll}
+            onRemove={removeNotification}
+          />
           <ExportCSV
             habits={habits}
             habitData={habitData}
