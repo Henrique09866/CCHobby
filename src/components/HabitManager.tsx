@@ -47,6 +47,10 @@ export function HabitManager({ habits, onAdd, onRemove }: Props) {
             value={newHabit}
             onChange={(e) => setNewHabit(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleAdd()}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck={false}
             className="h-9 text-sm"
           />
           <Button size="sm" onClick={handleAdd} className="shrink-0">
