@@ -32,9 +32,6 @@ export function DashboardHeader({ children }: Props) {
         <h1 className="text-2xl font-bold tracking-tight">CCHobby</h1>
       </div>
       <div className="flex items-center gap-3">
-        <p className="hidden text-sm text-muted-foreground sm:block">
-          {greeting}! 👋
-        </p>
         {children}
         <Button
           variant="outline"
