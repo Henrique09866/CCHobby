@@ -49,12 +49,11 @@ export function HabitPieChart({ perHabit, daysInMonth }: Props) {
                 data={data}
                 cx="50%"
                 cy="50%"
-                innerRadius={50}
-                outerRadius={80}
+                innerRadius={40}
+                outerRadius={70}
                 paddingAngle={3}
                 dataKey="value"
                 animationDuration={800}
-                label={({ name, percent }) => `${name} ${percent}%`}
               >
                 {data.map((_, i) => (
                   <Cell key={i} fill={COLORS[i % COLORS.length]} />
