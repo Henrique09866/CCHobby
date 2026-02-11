@@ -1,5 +1,10 @@
-import { Sparkles, Moon, Sun } from "lucide-react";
+import { Sparkles, Moon, Sun, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useEffect, useState, type ReactNode } from "react";
 
 interface Props {
@@ -7,10 +12,6 @@ interface Props {
 }
 
 export function DashboardHeader({ children }: Props) {
-  const hour = new Date().getHours();
-  const greeting =
-    hour < 12 ? "Bom dia" : hour < 18 ? "Boa tarde" : "Boa noite";
-
   const [dark, setDark] = useState(() => {
     const saved = localStorage.getItem("cchobby-theme");
     if (saved === "dark") return true;
@@ -23,6 +24,17 @@ export function DashboardHeader({ children }: Props) {
     localStorage.setItem("cchobby-theme", dark ? "dark" : "light");
   }, [dark]);
 
+  const themeButton = (
+    <Button
+      variant="outline"
+      size="icon"
+      onClick={() => setDark((d) => !d)}
+      aria-label="Alternar tema"
+    >
+      {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+    </Button>
+  );
+
   return (
     <header className="flex items-center justify-between py-6">
       <div className="flex items-center gap-3">
@@ -31,16 +43,29 @@ export function DashboardHeader({ children }: Props) {
         </div>
         <h1 className="text-2xl font-bold tracking-tight">CCHobby</h1>
       </div>
-      <div className="flex items-center gap-3">
+
+      {/* Desktop: all actions visible */}
+      <div className="hidden items-center gap-3 sm:flex">
         {children}
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setDark((d) => !d)}
-          aria-label="Alternar tema"
-        >
-          {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-        </Button>
+        {themeButton}
+      </div>
+
+      {/* Mobile: dropdown menu */}
+      <div className="flex items-center gap-2 sm:hidden">
+        {themeButton}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon" aria-label="Menu de ações">
+              <Menu className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            className="flex flex-col gap-2 p-3 z-50 bg-popover"
+          >
+            {children}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );
