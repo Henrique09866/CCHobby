@@ -7,6 +7,9 @@ import {
   Clock,
   Trophy,
   Settings,
+  Swords,
+  Coins,
+  Gift,
 } from "lucide-react";
 import {
   Sidebar,
@@ -31,6 +34,8 @@ const menuItems = [
   { id: "calendario", title: "Calendário", icon: CalendarDays },
   { id: "metas", title: "Metas", icon: Target },
   { id: "habitos", title: "Hábitos", icon: RefreshCw },
+  { id: "desafios", title: "Desafios", icon: Swords },
+  { id: "recompensas", title: "Recompensas", icon: Gift },
   { id: "estatisticas", title: "Estatísticas", icon: BarChart3 },
   { id: "tempo", title: "Tempo Produtivo", icon: Clock },
   { id: "conquistas", title: "Conquistas", icon: Trophy },
