@@ -9,7 +9,7 @@ import { ProductivityChart } from "@/components/ProductivityChart";
 import { HabitPieChart } from "@/components/HabitPieChart";
 import { MonthlyGoals } from "@/components/MonthlyGoals";
 import { HabitManager } from "@/components/HabitManager";
-import { ExportCSV } from "@/components/ExportCSV";
+
 import { NotificationPanel } from "@/components/NotificationPanel";
 import { NotificationScheduler } from "@/components/NotificationScheduler";
 import { NotificationToastContainer } from "@/components/NotificationToastContainer";
@@ -102,7 +102,6 @@ const Index = () => {
           <div className="space-y-4">
             <HabitManager habits={habits} onAdd={addHabit} onRemove={removeHabit} />
             <NotificationScheduler onSchedule={addNotification} />
-            <ExportCSV habits={habits} habitData={habitData} goals={goals} month={selectedMonth} year={selectedYear} />
           </div>
         );
       default:
@@ -147,7 +146,7 @@ const Index = () => {
                   <NotificationScheduler onSchedule={addNotification} />
                   <NotificationPanel notifications={notifications} unreadCount={unreadCount}
                     onMarkRead={markRead} onMarkAllRead={markAllRead} onClearAll={clearAll} onRemove={removeNotification} />
-                  <ExportCSV habits={habits} habitData={habitData} goals={goals} month={selectedMonth} year={selectedYear} />
+                  
                   <HabitManager habits={habits} onAdd={addHabit} onRemove={removeHabit} />
                 </DashboardHeader>
               </div>
