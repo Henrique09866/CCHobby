@@ -10,6 +10,7 @@ import {
   Swords,
   Coins,
   Gift,
+  Banknote,
 } from "lucide-react";
 import {
   Sidebar,
@@ -36,6 +37,7 @@ const menuItems = [
   { id: "habitos", title: "Hábitos", icon: RefreshCw },
   { id: "desafios", title: "Desafios", icon: Swords },
   { id: "recompensas", title: "Recompensas", icon: Gift },
+  { id: "financas", title: "Finanças", icon: Banknote },
   { id: "estatisticas", title: "Estatísticas", icon: BarChart3 },
   { id: "tempo", title: "Tempo Produtivo", icon: Clock },
   { id: "conquistas", title: "Conquistas", icon: Trophy },
