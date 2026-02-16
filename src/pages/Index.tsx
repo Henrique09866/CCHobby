@@ -16,6 +16,7 @@ import { NotificationToastContainer } from "@/components/NotificationToastContai
 import { ChallengeManager } from "@/components/ChallengeManager";
 import { RewardsDashboard } from "@/components/RewardsDashboard";
 import { CoinDisplay } from "@/components/CoinDisplay";
+import { FinanceDashboard } from "@/components/FinanceDashboard";
 import { useHabits } from "@/hooks/useHabits";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useChallenges } from "@/hooks/useChallenges";
@@ -83,6 +84,8 @@ const Index = () => {
             onAdd={addReward} onRedeem={redeemReward} onRemove={removeReward}
           />
         );
+      case "financas":
+        return <FinanceDashboard />;
       case "estatisticas":
         return (
           <div className="grid gap-6 md:grid-cols-2">
