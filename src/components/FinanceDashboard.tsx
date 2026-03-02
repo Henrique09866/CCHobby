@@ -3,8 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { DollarSign, TrendingDown, Wallet, AlertTriangle, Plus, Trash2, Pencil, Check } from "lucide-react";
+import {
+  PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid,
+} from "recharts";
+import { DollarSign, TrendingDown, Wallet, AlertTriangle, Plus, Trash2, Pencil, Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { useFinances, type Expense } from "@/hooks/useFinances";
 import { cn } from "@/lib/utils";
 
@@ -21,11 +24,20 @@ const COLORS = [
 
 const CATEGORIES = ["Moradia", "Utilidades", "Alimentação", "Transporte", "Lazer", "Saúde", "Educação", "Outros"];
 
+const MONTH_NAMES = [
+  "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
+];
+
 export function FinanceDashboard() {
   const {
     income, setIncome,
     expenses, addExpense, removeExpense, updateExpense,
     totalExpenses, balance, usagePercent,
+    categoryData,
+    selectedMonth, setSelectedMonth,
+    selectedYear, setSelectedYear,
+    prevTotal,
   } = useFinances();
 
   const [editingIncome, setEditingIncome] = useState(false);
@@ -49,6 +61,22 @@ export function FinanceDashboard() {
     setNewType("fixa");
   };
 
+  const goToPrevMonth = () => {
+    if (selectedMonth === 0) { setSelectedMonth(11); setSelectedYear(selectedYear - 1); }
+    else setSelectedMonth(selectedMonth - 1);
+  };
+
+  const goToNextMonth = () => {
+    if (selectedMonth === 11) { setSelectedMonth(0); setSelectedYear(selectedYear + 1); }
+    else setSelectedMonth(selectedMonth + 1);
+  };
+
+  // Sync income input when month changes
+  const handleEditIncome = () => {
+    setIncomeInput(String(income));
+    setEditingIncome(true);
+  };
+
   const pieData = expenses.map((e) => ({ name: e.name, value: e.value }));
 
   const balanceColor = balance > 0
@@ -63,8 +91,25 @@ export function FinanceDashboard() {
       ? "border-yellow-300 dark:border-yellow-700"
       : "border-red-300 dark:border-red-700";
 
+  const diffFromPrev = totalExpenses - prevTotal;
+
   return (
     <div className="space-y-6">
+      {/* Month Selector */}
+      <Card>
+        <CardContent className="flex items-center justify-between py-3">
+          <Button variant="ghost" size="icon" onClick={goToPrevMonth}>
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+          <h2 className="text-lg font-bold">
+            {MONTH_NAMES[selectedMonth]} {selectedYear}
+          </h2>
+          <Button variant="ghost" size="icon" onClick={goToNextMonth}>
+            <ChevronRight className="h-5 w-5" />
+          </Button>
+        </CardContent>
+      </Card>
+
       {/* Summary Cards */}
       <div className="grid gap-4 sm:grid-cols-3">
         <Card>
@@ -75,13 +120,8 @@ export function FinanceDashboard() {
           <CardContent>
             {editingIncome ? (
               <div className="flex gap-2">
-                <Input
-                  type="number"
-                  value={incomeInput}
-                  onChange={(e) => setIncomeInput(e.target.value)}
-                  className="h-8"
-                  onKeyDown={(e) => e.key === "Enter" && handleSaveIncome()}
-                />
+                <Input type="number" value={incomeInput} onChange={(e) => setIncomeInput(e.target.value)}
+                  className="h-8" onKeyDown={(e) => e.key === "Enter" && handleSaveIncome()} />
                 <Button size="sm" variant="ghost" onClick={handleSaveIncome}>
                   <Check className="h-4 w-4" />
                 </Button>
@@ -89,7 +129,7 @@ export function FinanceDashboard() {
             ) : (
               <div className="flex items-center gap-2">
                 <span className="text-2xl font-bold">R$ {income.toLocaleString("pt-BR")}</span>
-                <Button size="sm" variant="ghost" onClick={() => { setIncomeInput(String(income)); setEditingIncome(true); }}>
+                <Button size="sm" variant="ghost" onClick={handleEditIncome}>
                   <Pencil className="h-3 w-3" />
                 </Button>
               </div>
@@ -106,6 +146,11 @@ export function FinanceDashboard() {
             <span className="text-2xl font-bold">R$ {totalExpenses.toLocaleString("pt-BR")}</span>
             {income > 0 && (
               <p className="text-xs text-muted-foreground mt-1">{usagePercent}% da renda</p>
+            )}
+            {prevTotal > 0 && (
+              <p className={cn("text-xs mt-0.5", diffFromPrev > 0 ? "text-red-500" : diffFromPrev < 0 ? "text-green-500" : "text-muted-foreground")}>
+                {diffFromPrev > 0 ? "+" : ""}{diffFromPrev === 0 ? "Igual" : `R$ ${diffFromPrev.toLocaleString("pt-BR")}`} vs mês anterior
+              </p>
             )}
           </CardContent>
         </Card>
@@ -137,7 +182,6 @@ export function FinanceDashboard() {
             <CardTitle className="text-lg">Despesas</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* Add form */}
             <div className="grid gap-2 sm:grid-cols-2">
               <Input placeholder="Nome da despesa" value={newName} onChange={(e) => setNewName(e.target.value)} />
               <Input type="number" placeholder="Valor (R$)" value={newValue} onChange={(e) => setNewValue(e.target.value)} />
@@ -158,8 +202,6 @@ export function FinanceDashboard() {
             <Button onClick={handleAddExpense} className="w-full" disabled={!newName.trim() || !newValue}>
               <Plus className="h-4 w-4 mr-2" /> Adicionar Despesa
             </Button>
-
-            {/* List */}
             <div className="space-y-2 max-h-80 overflow-y-auto">
               {expenses.length === 0 && (
                 <p className="text-sm text-muted-foreground text-center py-4">Nenhuma despesa cadastrada.</p>
@@ -182,28 +224,14 @@ export function FinanceDashboard() {
             ) : (
               <ResponsiveContainer width="100%" height={320}>
                 <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={50}
-                    outerRadius={90}
-                    paddingAngle={3}
-                    dataKey="value"
-                    animationDuration={600}
-                  >
+                  <Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={90}
+                    paddingAngle={3} dataKey="value" animationDuration={600}>
                     {pieData.map((_, i) => (
                       <Cell key={i} fill={COLORS[i % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip
-                    formatter={(value: number) => [`R$ ${value.toLocaleString("pt-BR")}`, ""]}
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "8px",
-                    }}
-                  />
+                  <Tooltip formatter={(value: number) => [`R$ ${value.toLocaleString("pt-BR")}`, ""]}
+                    contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "8px" }} />
                   <Legend />
                 </PieChart>
               </ResponsiveContainer>
@@ -211,14 +239,40 @@ export function FinanceDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Bar chart by category */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Gastos por Categoria</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {categoryData.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-12">Adicione despesas para visualizar o gráfico.</p>
+          ) : (
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={categoryData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="category" tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} />
+                <YAxis tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+                  tickFormatter={(v) => `R$${v}`} />
+                <Tooltip formatter={(value: number) => [`R$ ${value.toLocaleString("pt-BR")}`, "Valor"]}
+                  contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "8px" }} />
+                <Bar dataKey="value" radius={[6, 6, 0, 0]} animationDuration={600}>
+                  {categoryData.map((_, i) => (
+                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
 
 function ExpenseRow({
-  expense,
-  onRemove,
-  onUpdate,
+  expense, onRemove, onUpdate,
 }: {
   expense: Expense;
   onRemove: (id: string) => void;
@@ -243,13 +297,8 @@ function ExpenseRow({
       <div className="flex items-center gap-1">
         {editing ? (
           <>
-            <Input
-              type="number"
-              value={editValue}
-              onChange={(e) => setEditValue(e.target.value)}
-              className="h-7 w-24 text-sm"
-              onKeyDown={(e) => e.key === "Enter" && handleSave()}
-            />
+            <Input type="number" value={editValue} onChange={(e) => setEditValue(e.target.value)}
+              className="h-7 w-24 text-sm" onKeyDown={(e) => e.key === "Enter" && handleSave()} />
             <Button size="icon" variant="ghost" className="h-7 w-7" onClick={handleSave}>
               <Check className="h-3 w-3" />
             </Button>
