@@ -29,7 +29,7 @@ export function HabitPieChart({ perHabit, daysInMonth }: Props) {
         <CardHeader className="pb-2">
           <CardTitle className="text-base">Hábitos no Mês</CardTitle>
         </CardHeader>
-        <CardContent className="flex h-[260px] items-center justify-center text-sm text-muted-foreground">
+        <CardContent className="flex h-[320px] items-center justify-center text-sm text-muted-foreground">
           Nenhum hábito registrado ainda.
         </CardContent>
       </Card>
@@ -42,15 +42,15 @@ export function HabitPieChart({ perHabit, daysInMonth }: Props) {
         <CardTitle className="text-base">Hábitos no Mês</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[260px] w-full">
+        <div className="h-[320px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={data}
                 cx="50%"
                 cy="50%"
-                innerRadius={40}
-                outerRadius={70}
+                innerRadius={50}
+                outerRadius={85}
                 paddingAngle={3}
                 dataKey="value"
                 animationDuration={800}
