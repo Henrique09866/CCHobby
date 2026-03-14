@@ -29,7 +29,7 @@ export function HabitPieChart({ perHabit, daysInMonth }: Props) {
         <CardHeader className="pb-2">
           <CardTitle className="text-base">Hábitos no Mês</CardTitle>
         </CardHeader>
-        <CardContent className="flex h-[260px] items-center justify-center text-sm text-muted-foreground">
+        <CardContent className="flex h-[320px] items-center justify-center text-sm text-muted-foreground">
           Nenhum hábito registrado ainda.
         </CardContent>
       </Card>
