@@ -112,25 +112,14 @@ const Index = () => {
           <div className="space-y-6">
             <SummaryCards progressPercent={monthStats.progressPercent} totalDone={monthStats.totalDone}
               streak={monthStats.streak} maxStreak={monthStats.maxStreak} />
-            <div className="grid gap-6 lg:grid-cols-12">
-              {/* Calendar - takes more space */}
-              <div className="lg:col-span-5">
-                <HabitCalendar
-                  month={selectedMonth} year={selectedYear} habits={habits} habitData={habitData}
-                  selectedDay={selectedDay} onMonthChange={setSelectedMonth} onYearChange={setSelectedYear}
-                  onSelectDay={setSelectedDay} onToggleHabit={toggleHabit} getDayProgress={getDayProgress} dateKey={dateKey}
-                />
-              </div>
-              {/* Goals */}
-              <div className="lg:col-span-4">
-                <MonthlyGoals goals={goals} onAdd={addGoal} onRemove={removeGoal} onToggle={toggleGoal} onEdit={editGoal} />
-              </div>
-              {/* Day summary */}
-              <div className="lg:col-span-3">
-                <DaySummaryCard habits={habits} habitData={habitData} />
-              </div>
+            <div className="grid gap-6 lg:grid-cols-2">
+              <HabitCalendar
+                month={selectedMonth} year={selectedYear} habits={habits} habitData={habitData}
+                selectedDay={selectedDay} onMonthChange={setSelectedMonth} onYearChange={setSelectedYear}
+                onSelectDay={setSelectedDay} onToggleHabit={toggleHabit} getDayProgress={getDayProgress} dateKey={dateKey}
+              />
+              <MonthlyGoals goals={goals} onAdd={addGoal} onRemove={removeGoal} onToggle={toggleGoal} onEdit={editGoal} />
             </div>
-            {/* Charts row - full width */}
             <div className="grid gap-6 lg:grid-cols-2">
               <ProductivityChart dailyProgress={monthStats.dailyProgress} />
               <HabitPieChart perHabit={monthStats.perHabit} daysInMonth={monthStats.daysInMonth} />
