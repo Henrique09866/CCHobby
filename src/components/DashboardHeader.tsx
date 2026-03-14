@@ -38,8 +38,13 @@ export function DashboardHeader({ children }: Props) {
   return (
     <header className="flex items-center justify-between py-6">
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
-          <Sparkles className="h-5 w-5 text-primary-foreground" />
+        <div className="flex items-center justify-center">
+          <img 
+            src="/Logo_CCHobby.png" 
+            alt="CCHobby Logo" 
+            className="h-7 w-auto object-contain dark:invert" 
+            style={{ background: 'transparent', mixBlendMode: 'normal' }} 
+          />
         </div>
         <h1 className="text-2xl font-bold tracking-tight">CCHobby</h1>
       </div>
