@@ -24,7 +24,7 @@ export function SummaryCards({ progressPercent, totalDone, streak, maxStreak }: 
   };
 
   return (
-    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
       {cards.map((c) => (
         <Card key={c.key} className="transition-shadow hover:shadow-md">
           <CardContent className="flex items-center gap-4 p-5">
