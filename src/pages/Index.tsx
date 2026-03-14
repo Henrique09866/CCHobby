@@ -88,7 +88,7 @@ const Index = () => {
         return <FinanceDashboard />;
       case "estatisticas":
         return (
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 lg:grid-cols-2">
             <ProductivityChart dailyProgress={monthStats.dailyProgress} />
             <HabitPieChart perHabit={monthStats.perHabit} daysInMonth={monthStats.daysInMonth} />
           </div>
