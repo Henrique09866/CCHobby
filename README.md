@@ -4,7 +4,6 @@ CCHobby é uma plataforma web de **organização pessoal, hábitos, metas e fina
 
 O projeto reúne em um só lugar ferramentas de produtividade e controle financeiro, com um dashboard moderno, responsivo e intuitivo.
 
-(Link: https://cc-hobby.vercel.app/)
 
 ---
 
